@@ -1,0 +1,44 @@
+Let's break down part 3 of your request: Analyzing Hidden iFrames and Form Submissions in the context of 3DS (3D Secure) authentication.
+Overview:
+
+Hidden iFrames and automatic form submissions are often used in online payment systems (including 3DS) to securely transmit data (like authentication tokens, customer info, etc.) without the user being aware of the transmission. These elements can be used for fraud prevention, authentication, and verification without user intervention.
+
+We’ll focus on how to capture and analyze requests from hidden iFrames and form submissions, as well as how to inspect WebSocket traffic to find any hidden communication between the client (browser) and server.
+1. Capture and Review Requests Originating from Forms
+
+In this step, we'll deal with form submissions, particularly from the collectionForm and stepup forms, which likely contain sensitive user data related to authentication.
+Step 1: Intercepting Form Submissions in Burp Suite
+
+    Configure Burp Suite to act as a proxy between your browser and the application you’re testing. Set up the browser's proxy settings to use Burp (usually 127.0.0.1:8080).
+
+    Navigate to the relevant pages that involve the collection and stepup forms (likely on the 3DS flow) while Burp Suite is intercepting traffic. If the forms are hidden or embedded in iframes, you can still capture requests by inspecting the entire HTML/JS traffic.
+
+    Inspect Form Submissions:
+        Go to the HTTP history tab in Burp Suite's Proxy tab.
+        Filter requests to identify POST requests with form data.
+        Look for form fields and examine the request payloads for hidden fields like JWTs, session tokens, or other authentication data being submitted.
+
+    Reviewing Parameters:
+        Examine the POST data. The collectionForm and stepup forms likely have fields that contain key information, like:
+            Authentication tokens
+            Payment details (masked)
+            Card information (if relevant)
+        If the form submission involves JSON, ensure you're checking for the Content-Type header (application/json).
+        For HTML forms, the Content-Type will often be application/x-www-form-urlencoded, and you will see key-value pairs in the body of the request.
+
+    Example Form Submission:
+
+    <form action="https://example.com/collect" method="POST">
+        <input type="hidden" name="auth_token" value="xyz123">
+        <input type="hidden" name="3ds_token" value="abc456">
+        <input type="submit" value="Submit">
+    </form>
+
+    This form might post a JWT token or other authentication information that you can intercept and analyze.
+
+Step 2: Review HTTP/HTTPS Traffic
+
+While the forms are submitting data, use Burp Suite's Intercept tab to manually inspect requests in real time. Here's what to focus on:
+
+    Look for any hidden fields (like auth_token, 3ds_token, or session tokens).
+    If you see any encrypted data or tokens, you’ll need to analyze them in later steps (like decoding JWT tokens, if necessary).

@@ -1,0 +1,23 @@
+Visa Payment Passkey
+Suggest Edits
+What is Visa Payment Passkey?
+
+Visa Payment Passkey is a new digital identity solution allowing their cardholders to authenticate their online payments by unlocking their smart device. Visa facilitates device recognition, cardholder interactions, and privacy-preserving authentication of a payment transaction. Following the cardholder’s successful verification, Visa will present cryptographic proof to the issuer and provide the merchant with authentication results. Visa Payment Passkey creates a consistent user experience across payment channels, increasing conversion and reducing abandonment.
+
+Visa Payment Passkey’s approach will scale across all checkout experiences and reduce the amount of friction during a payment. Visa will manage the keys on behalf of the merchant and issuer and will only create the key pair following a successful issuer step up during enrollment. Visa will also require an issuer step up on all new cardholder devices not previously seen before, enforcing the concept of a ‘device-bound’ passkey for use in payment authentication. Cardholders and issuers will have access to manage the full lifecycle of passkeys, allowing the key pair to be removed if deemed necessary.
+
+What is FIDO®?
+
+FIDO (Fast Identity Online) is a set of standards-based authentication protocols designed to enable biometric authentication online.
+
+FIDO® is larger than just Cardinal. The FIDO Alliance is a coalition of industry-leading companies in tech, payments, and commerce. The Alliance launched in 2013 with the goal of developing and promoting a unified cross-industry standard for more secure, robust authentication systems.
+How does FIDO® work?
+
+In payments, a FIDO® credential (in this case, passkey) needs to be linked to a PAN and device combination. These unique entities are identified and authenticated using tools like biometrics or authenticators. Both the methods of authentication and the keys that secure them stay on the device, removing reliance on server-side secrets and minimizing the risk from data breaches.
+
+For more information on FIDO® and how it works, see: How FIDO Works - Standard Public Key Cryptography & User Privacy
+Who can enroll in Visa Payment Passkey?
+
+The user’s device must have platform authenticators such as biometrics and the browser in use must be FIDO compatible. Also, Cardinal can only enroll Visa branded cards for the MVP of this solution.
+
+

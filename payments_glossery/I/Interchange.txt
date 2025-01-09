@@ -1,0 +1,3 @@
+Interchange
+
+The domestic and international systems operated by Visa® and Mastercard®. The interchange is used for authorization, settlement, and the passing through of interchange and other fees, as well as other monetary and non-monetary information related to bank card activities.

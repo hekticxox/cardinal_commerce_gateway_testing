@@ -1,0 +1,6 @@
+
+Digital Wallets
+
+Digital wallets allow consumers to shop online and pay using a wallet system rather than entering a credit card for each purchase. Wallets allow consumers to store their card account details safely and securely and provide an alternative way to shop remotely. Wallets typically use a username and PIN or other security device to authenticate the buyer.
+
+Examples of digital wallets are PayPal, Google Pay, Apple Pay, Samsung Pay and more

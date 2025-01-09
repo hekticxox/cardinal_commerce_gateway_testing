@@ -1,0 +1,3 @@
+Merchant Plug-In (MPI) /3DS Server
+
+A software module used to provide an interface between a software service and merchants’ payment processing software. Some examples are the 3-D Secure protocols. The software also verifies issuers’ digital signatures in the authentication responses returned to the merchant.

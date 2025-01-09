@@ -1,0 +1,9 @@
+Step 2: Capture the Lookup and Challenge Requests in Burp Suite
+
+    Ensure Burp Suite is Set Up to Capture Traffic:
+        Make sure you’ve got your proxy setup in Burp Suite and that your browser is routing traffic through it.
+        In the Proxy tab, ensure Intercept is turned on to capture the requests as they pass through.
+
+    Perform Actions That Trigger Lookup and Challenge Requests:
+        Go through the payment process or any other flow where you expect to see Lookup and Challenge requests.
+        Look for POST or GET requests that include the DFReferenceId, TransactionId, ACSUrl, and Payload.

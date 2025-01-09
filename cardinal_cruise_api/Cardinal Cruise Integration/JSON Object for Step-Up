@@ -1,0 +1,127 @@
+JSON Object for Step-Up
+Suggest Edits
+
+These are a list of objects used in the step up portion of the Cardinal CruiseAPI flow.
+JSON Objects
+
+These objects are used in IRC message events between Cruise integration and the integrator.
+Basic Message Format
+
+The below fields will be included in every message.
+Field	Type	Possible Values	Description
+MessageType	String	stepUp.acsRedirection
+
+stepUp.completion
+
+stepUp.error	This field describes the type of object that is being passed on the message.
+Step-Up Completion
+
+This event can be used to inform the merchant that the step-up process has completed and that the next step of the transaction flow should be taken (cmpi_authenticate). This event is not an indicator of the Step-Up attempt success or failure. This is equal to receiving a POST request on the Merchants ReturnURL in the older, traditional ReturnURL flow.
+
+Code Sample:
+
+{
+  "MessageType": "stepUp.completion",
+  "TransactionId": "2VXhY9usqpQhb5YN1250",
+  "MD": "560bd1aa-9521-41f1-a1f6-a4c846b8683d"
+}
+
+Message Object Fields
+Field	Type	Possible Values	Description
+MessageType	String	stepUp.completion	This field describes the type of object that is being passed on the message.
+TransactionId	String		The Core transactionId the event is in reference to. This value is first returned on the cmpi_lookup
+MD	String		Optional Field. The MD field that the merchant sent on the /StepUp request to CentinelAPI. This can be used to send a merchant transactional identifier, for example a sessionId, on the request to have echoed back when the step up process has competed.
+Step-Up Error
+
+This event informs the merchant that an error was encountered during processing. This message is the end of a step up attempt. There are 2 basic cases where this error can be triggered:
+
+    Merchant is using PostMessage completion flow, all errors will be returned via the postMessage API through the browser
+    Merchant is using ReturnURL completion flow, but Cardinal was unable to recover the ReturnURL.
+
+    🚧
+
+    This sequence of events is highly improbable, yet it serves as a last resort safeguard, aiming to restore control to the merchants.
+
+    📘
+
+    Note:
+
+    Cardinal will always try to include as much data in the error object as possible. However it is possible that the error may occur in such a way that the TransactionId and the MD fields may not be available to include in the error message. Merchants should account for the possibility that those fields maybe missing or lack values.
+
+    MessageType will always be included.
+
+Code sample
+
+{
+  "MessageType": "stepUp.error",
+  "TransactionId": "2VXhY9usqpQhb5YN1250",
+  "MD": "560bd1aa-9521-41f1-a1f6-a4c846b8683d"
+}
+
+Step-Up ACS (Optional)
+
+This event triggers during the step-up flow when the ACS page iframe has triggered the onload event. This informs the merchant that the step-up page has properly loaded and redirected to the ACS page. This event is not intended to represent a successfully rendered ACS challenge, as Cardinal is unable to programmatically view or process the contents of the ACS frame due to it being rendered as a cross domain iframe. This is simply intended as a notification that the step up page has properly rendered and submitted to the ACS. While unlikely, it's important to know that it is possible this event can be triggered even if the ACS has rendered an error page.
+
+    📘
+
+    Note
+
+    This event is behind a Payer Authentication configuration. Enable Step Up is required to be enabled for this event to be available for the merchant
+
+Code Sample:
+
+{
+  "MessageType": "stepUp.acsRedirection",
+  "TransactionId": "Wan8wbhnN45SmHTT2Yg0"
+}
+
+Sample Integration
+
+The below sample shows how a merchant could add support for handling all IRC events available on the StepUp endpoint
+
+/**
+ *  The origin value will change with environments
+ *    - STAG: https://centinelapistag.cardinalcommerce.com
+ *    - PROD: https://centinelapi.cardinalcommerce.com
+ *
+ * const is recommended as a security measure to use to prevent having the origin being able to be overwritten
+ **/
+// const cruiseApiOrigin = 'https://centinelapistag.cardinalcommerce.com'
+const cruiseApiOrigin = 'https://centinelapistag.cardinalcommerce.com'
+ 
+/**
+ * NOTE: This event binding will not work in older IE browsers.
+ * You will need to also implement attachEvent if you need to support older IE browsers.
+ * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#legacy_internet_explorer_and_attachevent
+ **/
+window.addEventListener('message', (evnt) => {
+  try {
+    // Filter postMessage events by origin and process only the Cardinal events
+    if (evnt.origin === cruiseApiOrigin) {
+      // CruiseAPI events are stringified JSON objects to ensure backwards compatibility with older browsers
+      let data = JSON.parse(evnt.data)
+      if (data !== undefined && data.MessageType !== undefined) {
+        // Do merchant logic
+        switch(data.MessageType)
+        {
+          case 'stepUp.acsRedirection':
+            // Implement Merchant logic
+            break;
+          case 'stepUp.completion':
+            // Implement Merchant logic
+            break;
+          case 'stepUp.error':
+            // Implement Merchant logic
+            break;
+          default:
+            console.error("Unknown MessageType found ["+data.MessageType+"]");
+            // Implement Merchant logic - Handle unknown MessageType
+            break;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('failed to parse CruiseAPI postMessage event', e)
+  }
+}, false)
+

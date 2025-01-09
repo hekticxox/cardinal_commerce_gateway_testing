@@ -1,0 +1,6 @@
+Step 4: Verifying and Debugging the JWT Handling
+
+    Inspect JWTs: Make sure you’ve correctly configured the filters and Burp is capturing JWTs.
+    Check Payload: Look for the claims in the JWT’s payload to ensure the authentication/authorization logic is what you expect.
+    Use JWT Editor: If you’re dealing with encrypted JWTs, the JWT Editor will help you view the raw payloads.
+    Manipulate and Re-test: Test scenarios by manipulating JWT values. For example, change the exp (expiration) claim or swap user roles, and see how the server responds.

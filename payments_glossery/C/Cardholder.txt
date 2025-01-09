@@ -1,0 +1,3 @@
+Cardholder
+
+A shopper who uses a card issued by a bank to make cashless payments to a merchant. A person or entity that is issued a credit or debit account that is accessed with a card or PAN.

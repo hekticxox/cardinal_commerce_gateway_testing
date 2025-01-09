@@ -1,0 +1,3 @@
+Authentication
+
+The process where data elements from a consumer’s online shopping session and transaction request are shared between the merchant and issuer to verify the risk of a transaction and cardholder information in real-time. In simple terms, authentication is the process of verifying that the person making a purchase is who they say they are. Authentication can either happen passively in the background, or if the transaction is perceived to be risky, and issuer can engage with their cardholder to actively authenticate using methods like one-time-passcodes (OTP) or even biometrics.

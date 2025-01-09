@@ -1,0 +1,14 @@
+Step 4: Reproduce and Manipulate Traffic
+A. Use Repeater for Replay
+
+    Right-click a captured request and send it to Repeater.
+    Modify fields like JWT, TransactionId, or encrypted payloads.
+    Replay the request and observe responses to understand how Cardinal processes data.
+
+B. Test for Vulnerabilities
+
+    Tamper with parameters:
+        Invalid/missing JWT.
+        Corrupt transaction data.
+        Delay or modify headers like Origin, User-Agent, etc.
+    Observe error messages or unexpected responses.

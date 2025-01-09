@@ -1,0 +1,3 @@
+Chargeback
+
+A payment card transaction that is under dispute. This action is initiated by the card issuing financial institution to settle a financial claim between the issuer and acquirer. This claim may be initiated by the issuing financial institution directly or by their consumer, the cardholder, and can result in the transaction being billed back to the merchant. These are not to be confused with refunds for returned goods.

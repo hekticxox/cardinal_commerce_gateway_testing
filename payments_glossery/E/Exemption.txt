@@ -1,0 +1,3 @@
+Exemption
+
+Referring to PSD2 SCA, an exemption allows a transaction to take place without adhering to the strong consumer authentication requirement. Examples of exemptions under PSD2 SCA include: low value (below 30€), whitelisting/trusted beneficiaries, transaction risk analysis, and secure corporate payments.

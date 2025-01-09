@@ -1,0 +1,3 @@
+3DS replay
+
+CardinalCommerce feature designed so that when a merchant sends a transaction for authentication with the EMV® 3DS protocol, if, for any reason, an attempts or an error is returned, Cardinal automatically replays that same transaction with 3DS 1.0 to maximize the chance of a successful authentication.

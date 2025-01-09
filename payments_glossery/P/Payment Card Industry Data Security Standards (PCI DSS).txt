@@ -1,0 +1,5 @@
+Payment Card Industry Data Security Standards (PCI DSS)
+
+Common standards for merchants and third parties resulting from the alignment of American Express, Mastercard, Visa and other card associations with the similar goal of protecting payment card account data wherever it is received or stored.
+
+Cardinal is PCI-DSS Level 1 certified for all our services offered to merchants and issuers globally.

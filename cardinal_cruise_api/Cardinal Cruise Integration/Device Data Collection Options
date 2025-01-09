@@ -1,0 +1,160 @@
+This Device Data Collection page provides a set of options for our Customers to integrate one of these requirements for our Cardinal Cruise API integration. By choosing one of the Device Data Collection option, Cardinal is able to collect the 3DS 2.0 (EMV 3DS) required browser data elements in order to make the 3DS 2.0 request and invoke the 3DS Method URL if available. We will leverage this process to place the required Method URL on the merchant's site, within an iframe, if the Issuing Bank chooses to use one. (Per EMV 3DS requirements, a merchant must place and run the Method URL on their website if an Issuing Bank uses one).
+
+The Method URL is a concept in the EMV 3DS protocol that allows the Issuing Bank to obtain additional browser information prior starting the authentication session to help facilitate risk-based authentication. The implementation techniques to obtain the additional browser information is out of scope of the EMV 3DS protocol. As a note, this same process was done in 3DS 1.0, however it was done when the Consumer's browser was redirected to the ACS URL, this Method URL step allow for a better user experience.
+
+    👍
+
+    Method URL pointer
+
+    In an event where Method URL exists, Device Data Collection (DDC) may take up to 10 seconds to complete. In such cases, we recommend an interval of ~10 - 12 seconds between the DDC Request and cmpi_lookup request. If the merchant receives the DDC response before 10 seconds, the merchant may proceed with the cmpi_lookup request.
+
+Endpoints
+
+Connection Endpoints for Staging and Production -
+
+Merchants integrating to the v2 endpoint will receive additional information regarding the Cardinal Data Collection and MethodUrl Collection.
+
+    https://centinelapistag.cardinalcommerce.com/V2/Cruise/Collect
+    https://centinelapi.cardinalcommerce.com/V2/Cruise/Collect
+
+V1:
+
+    https://centinelapistag.cardinalcommerce.com/V1/Cruise/Collect
+    https://centinelapi.cardinalcommerce.com/V1/Cruise/Collect
+
+Prerequisites
+
+To support Device Data Collection, you must complete one of these Options below
+
+    The Integrator must have access to the card BIN or full card number of cardholder
+    The Integrator must create an iframe on their website and post to the Device Data Collection URL
+
+Implementation Options
+
+Overview of each Device Data Collection option.
+Option 1 - Data Exchange API plus JWT [Recommended]
+
+This option allows the integrator to not pass the full Card Number in the JWT, but allows you to pass the full Card Number in an API Call to setup the Device Data Collection session and in response obtain a ReferenceId to pass up to the web frontend instead of the Card BIN. In addition to ReferenceId, you will receive additional data points for the given Card Number that can be leveraged during authentication.
+Integration Steps
+
+    Cardinal Cruise Account Credentials
+    Data Exchange API
+
+    Connecting to the Data Exchange API
+    Data Exchange Request Field Names
+    Handling the Data Exchange Response with ReferenceId
+
+    Cardinal CruiseAPI - ReferenceId passed in JWT
+
+    Generating an Authentication JWT with ReferenceId
+    Initiating the DeviceDataCollectionUrl
+    Handle the Response from the Device Data Collection URL
+
+Option 2 - JWT - Card BIN in JWT
+
+This option allows the integrator to pass the Card BIN in the JWT. As part of the JWT generation, all you will need to do is add the card bin to full card number in the Payload within the Transactional JWT. When the Device Data Collection URL is invoked, the Transactional JWT will be posted over to the URL.
+Integration Steps
+
+    Card BIN goes into the Transactional JWT
+    POST Transactional JWT to the Device Data Collection URL
+    Handle the Response from the Device Data Collection URL on the ReturnUrl provided within the TransactionalJWT
+
+Code Sample of the Iframe you Post /collect to:
+
+<iframe name='collectionFrame' height="10" width="10" style="visibility: hidden; position: absolute; top: -1000px; left: -1000px;"></iframe>
+<form id="collectionForm" target="collectionFrame" name="devicedata" method="POST" action="https://centinelapistag.cardinalcommerce.com/V2/Cruise/Collect">
+  <input type="hidden" name="JWT" value="Transactional JWT generated per specification" />
+</form>
+<script>window.onload = function () {
+    // Auto submit form on page load
+    document.getElementById('collectionForm').submit();
+  }
+</script>
+
+NOTE: This example shows the ReturnUrl being populated in the Transactional JWT instead of a POST parameter.
+Device Data Collection Response Options
+
+The merchant needs to handle the Response that they get from Device Data Collection Url.
+
+This can be achieved by using either of the following options -
+
+Option 1 - Using a ReturnUrl
+
+Option 2 - Using postMessage
+
+    📘
+
+    If a merchant is currently integrated to a V1 endpoint, they will need to change the way they handle Device Data Collection (/Collect) response.
+
+Return URL Responses
+
+This is the code sample for the V1 Endpoint
+
+{
+  "iss": "5b7c5b922f3e733a44320e85",
+  "iat": 1535052764,
+  "exp": 1535059964,
+  "jti": "83840924-a856-4901-ab21-0b61421c0933",
+  "aud": "49e56790-a70b-11e8-9354-f715d5987f69",
+  "Payload": {
+    "ActionCode": "SUCCESS",
+    "SessionId": "0_efc85926-b576-4574-ae92-e1dd11132582",
+    "ErrorNumber": 0,
+    "ErrorDescription": "Success"
+  }
+}
+
+This is the code sample for V2 Endpoint
+
+{
+  "iss": "5b7c5b922f3e733a44320e85",
+  "iat": 1535052764,
+  "exp": 1535059964,
+  "jti": "83840924-a856-4901-ab21-0b61421c0933",
+  "aud": "49e56790-a70b-11e8-9354-f715d5987f69",
+  "Payload": {
+    "ActionCode":"SUCCESS",
+    "SessionId": "0_90de2cfc-f8c7-4793-b4fa-ddd841aa2be8",
+    "DataSources": {
+        "CardinalData": {
+            "Attempted": true,
+            "Completed": true
+        },
+        "MethodUrl": {
+            "Attempted": true,
+            "Completed": true
+        }
+    }
+}
+}
+
+Post Message Response
+
+Code sample for V1
+
+{
+  "MessageType": "profile.completed",
+  "SessionId": "0_90de2cfc-f8c7-4793-b4fa-ddd841aa2be8",
+  "Status": true
+}
+
+Code sample for V2
+
+{
+  "MessageType": "profile.completed",
+  "Payload":{
+    "ActionCode":"SUCCESS",
+    "SessionId": "0_90de2cfc-f8c7-4793-b4fa-ddd841aa2be8",
+    "DataSources": {
+        "CardinalData": {
+            "Attempted": true,
+            "Completed": true
+        },
+        "MethodUrl": {
+            "Attempted": true,
+            "Completed": true
+        }
+    }
+  }
+}
+

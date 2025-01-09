@@ -1,0 +1,28 @@
+Integration Process
+Suggest Edits
+Before Integration
+
+To ensure a seamless integration to Visa Payment Passkey ensure the following prerequisites are met:
+
+    The user's device must have platform authenticators such as Face ID or Touch ID. Currently, VPP does not provide support to roaming authenticators such as YubiKey.
+    The browser being used must have WebAuthN API support.
+    The integrator must support the Data Exchange API.
+    For browser flows, VPP is only supported for Cardinal Cruise API. For app flows, when using Web SDK, integrators would need to consider implementation of iframes in their checkout flow.
+
+During Integration
+
+You will need to complete the following steps:
+
+    Check VPP Compatibility
+    Check for VPP Enrollment
+    Enroll a User into VPP
+    Authenticate using VPP
+
+
+VPP API Support
+
+The user’s browser will also need to be compatible with VPP API. The API has two core components explained in the table below:
+
+API Name	Description	Browser Support Resourses
+WebAuthN	Web Authentication API is the browser spec that enables the creation of public-key-based credentials by web applications	External Link: CanIUse: WebAuthN
+isUserVerifyingPlatformAuthenticatorAvailable	This API is used directly by FIDO and as such is a hard requirement for browser API support.	External Link: CanIUse: isUserVerifyingPlatformAuthenticatorAvailable

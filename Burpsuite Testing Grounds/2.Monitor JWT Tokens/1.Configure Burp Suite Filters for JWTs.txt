@@ -1,0 +1,9 @@
+Step 1: Configure Burp Suite Filters for JWTs
+
+You’ll need to make sure you're only focusing on the traffic that contains JWT tokens. This can be done by setting up some filters in Burp Suite.
+Set Up Filters to Capture JWTs
+
+    Open Burp Suite and go to the Proxy tab.
+    Go to the Intercept sub-tab.
+    Under Intercept is on, you’ll see the requests being captured. Right-click on a request that includes a JWT (usually in headers like Authorization: Bearer <JWT>), and select Send to Intruder or Send to Repeater.
+    Now go to the Target tab and right-click on the specific host or path you want to monitor, such as /Collect, /Cruise/StepUp, or /Authenticate. You’ll set filters for those endpoints.

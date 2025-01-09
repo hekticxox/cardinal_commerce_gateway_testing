@@ -1,0 +1,3 @@
+One-leg out transaction
+
+Payment transactions where one of the PSPs (either of the payer or the payee) is based outside of the EU for purposes of SCA requirements regarding PSD2 and two-factor authentication. One-leg out transactions are not subject to the SCA requirement.

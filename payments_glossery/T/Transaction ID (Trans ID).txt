@@ -1,0 +1,3 @@
+Transaction ID (Trans ID)
+
+Each transaction within the system is assigned a unique transaction ID. This ID may be used to sort or identify specific transactions within the system.

@@ -1,0 +1,3 @@
+Card-Not-Present Fraud
+
+Also known as ecommerce fraud, card-not-present refers to online payments as opposed to presenting a physical card in store. Card-not-present fraud is fraud that occurs in a digital environment.

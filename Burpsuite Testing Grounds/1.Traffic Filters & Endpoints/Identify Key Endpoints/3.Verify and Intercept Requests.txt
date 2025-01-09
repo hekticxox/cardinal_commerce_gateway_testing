@@ -1,0 +1,18 @@
+Step 3: Verify and Intercept Requests
+A. Run the Application
+
+    Launch the app or browser session that interacts with the Cardinal 3DS flow.
+    Use Burp's CA Certificate to intercept SSL/TLS traffic:
+        Go to Options → SSL/TLS, install the Burp certificate, and configure your browser/device to trust it.
+        Ensure HTTPS traffic is captured.
+
+B. Monitor Requests
+
+    You should see requests to the target endpoints appearing in Burp's Proxy tab.
+
+C. Inspect Request/Response Details
+
+    Click on each request to view:
+        Headers: Look for Authorization (JWT tokens), Content-Type, and any unique API keys.
+        Payloads: Check POST/PUT payloads for sensitive data (JSON, Base64, etc.).
+        Responses: Analyze returned data, especially for TransactionId and encrypted fields.

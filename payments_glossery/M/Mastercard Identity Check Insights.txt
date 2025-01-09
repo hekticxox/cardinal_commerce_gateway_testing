@@ -1,0 +1,3 @@
+Mastercard Identity Check Insights
+
+Mastercard’s Data Only method for enhanced data sharing with a guaranteed frictionless experience for the cardholder while using EMV 3DS rails to influence approvals with a card issuer.

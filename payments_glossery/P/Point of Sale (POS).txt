@@ -1,0 +1,3 @@
+Point of Sale (POS)
+
+The merchant location where a transaction originates between a cardholder and a merchant with the card and cardholder present. Typically, the card chip card is inserted into the reader, held over the terminal for “tap to pay” contactless payments, or the magnetic stripe is swiped.

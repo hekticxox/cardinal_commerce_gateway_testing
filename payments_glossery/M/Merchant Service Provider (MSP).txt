@@ -1,0 +1,3 @@
+Merchant Service Provider (MSP)
+
+Provides a merchant with an account, processing, and report tools to enable that merchant to process online transactions. Each transaction is facilitated by the MSP on behalf of the merchant.

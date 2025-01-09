@@ -1,0 +1,5 @@
+Encryption
+
+A method of coding data, using an algorithm, to protect it from unauthorized access by scrambling sensitive data automatically in the terminal or computer before it is transmitted. There are many types of data encryption, and they are the basis of network security.
+
+Cardinal frequently encrypts data to manage sensitive cardholder data and process payment transactions via 3-D Secure, Data Only, and other solutions.

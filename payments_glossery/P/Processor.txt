@@ -1,0 +1,3 @@
+Processor
+
+A member, Mastercard and/or Visa, or a Mastercard/ Visa approved non-member, acting as the agent of a member, that provides authorization, clearing, or settlement services for merchants and members. Processors must have a sponsoring bank to gain access to interchange networks and provide for the settlement of funds. A business entity that receives a Monetary Destination file for clearing purposes.

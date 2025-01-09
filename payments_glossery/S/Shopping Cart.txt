@@ -1,0 +1,3 @@
+Shopping Cart
+
+Software that allows visitors to an internet site to buy from that merchant. A shopping cart houses all sellable goods and services offered by the merchant and controls available inventory count. Carts also assist in the checkout process, collecting consumer billing, shipping and payment, and may also store consumer cards on file for an online consumer account with the merchant. Shopping carts connect to the merchant’s gateway, acquiring bank, and payment processor to help facilitate the consumer purchase.

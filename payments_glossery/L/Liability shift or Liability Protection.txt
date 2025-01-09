@@ -1,0 +1,3 @@
+Liability shift or liability protection
+
+The liability for chargebacks resulting from fraudulent transactions moves from the merchant to the issuing financial institution when the merchant has authenticated the transaction. Without Consumer Authentication, merchants are liable for chargebacks. Merchants using EMV 3-D Secure when authenticating transactions receive liability protection.

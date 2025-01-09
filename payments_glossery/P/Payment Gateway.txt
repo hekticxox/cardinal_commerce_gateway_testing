@@ -1,0 +1,3 @@
+Payment Gateway
+
+An internet-based service that transports credit card information from a computer terminal or website to a credit card processor, where it can be verified.

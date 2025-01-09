@@ -1,0 +1,3 @@
+PSD2
+
+European Banking Authority’s (EBA) 2nd Payment Service Directive that initiated in early 2017. PSD2 is designed to drive payment innovation through open banking and data security. Strong Customer Authentication (SCA) is a requirement of PSD2 that is coming into practice in early 2021.

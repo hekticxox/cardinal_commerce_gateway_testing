@@ -1,0 +1,3 @@
+Bank Identification Number (BIN)
+
+A unique six to nine-digit number to identify processors, acquirers, issuers, and other financial institutions involved in the interchange process. These are the first six to nine digits of the cardholder’s account number, also known as Issuer Identification Number (IIN).

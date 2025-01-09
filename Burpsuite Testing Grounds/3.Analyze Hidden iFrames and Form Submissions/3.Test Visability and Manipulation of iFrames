@@ -1,0 +1,21 @@
+3. Test Visibility and Manipulation of iFrames
+
+In this step, we'll cover testing the visibility and interaction with iFrames and forms.
+Step 1: Manipulate Hidden iFrames
+
+    Force Interaction: You can manipulate hidden iFrames by exposing them with browser tools or CSS changes.
+        For example, using browser DevTools, you can remove the CSS rule hiding the iFrame, making it visible and interacting with it directly.
+
+    Example command in browser DevTools console to show the hidden iFrame:
+
+    document.querySelector('iframe').style.display = 'block';
+
+Step 2: Modifying Form Data or Token Values
+
+    If you identify that a form is submitting sensitive data or JWT tokens, you can try manipulating the form values using the Intercept tab in Burp Suite:
+        Change hidden form fields like auth_token or JWT values.
+        Modify the iFrame content by altering request payloads or injecting custom data before sending the form submission.
+
+Step 3: Use Burp Extensions for JWT/Token Decryption
+
+If the form or iFrame involves JWT tokens or other encrypted payloads, you can use Burp Suite Extensions like the JWT Editor to decode and manipulate JWT tokens before they’re sent.

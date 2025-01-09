@@ -1,0 +1,3 @@
+American Express SafeKey
+
+American Express’ version of the 3-D Secure protocols that works to reduce online fraud by confirming the card member’s identity with additional information. Learn more about SafeKey here: https://network.americanexpress.com/globalnetwork/safekey/

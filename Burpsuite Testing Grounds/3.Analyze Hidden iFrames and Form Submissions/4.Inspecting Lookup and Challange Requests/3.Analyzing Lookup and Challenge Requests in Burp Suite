@@ -1,0 +1,59 @@
+Step 3: Analyzing Lookup and Challenge Requests in Burp Suite
+
+After capturing the requests, let's break down the steps to analyze them in Burp:
+1. Focus on Key Parameters:
+
+    DFReferenceId and TransactionId:
+
+        When analyzing the request in Burp Suite, look at the Request tab in the HTTP History section.
+
+        Search for parameters like DFReferenceId and TransactionId in the query string or request body (for POST requests).
+
+        For example:
+
+    POST /3ds/lookup HTTP/1.1
+    Host: example.com
+    Content-Type: application/x-www-form-urlencoded
+    Content-Length: 123
+
+    DFReferenceId=abc123&TransactionId=xyz987&Payload=someencrypteddata
+
+ACSUrl:
+
+    The ACSUrl parameter is a URL that will typically appear in the response from the server or in the request for the Challenge step.
+
+    If you see a request containing an ACSUrl, it means that the user is being redirected for further authentication.
+
+    Example:
+
+        HTTP/1.1 302 Found
+        Location: https://bank-acs.com/authenticate?transactionId=xyz987
+
+2. Inspect the Payload:
+
+    The Payload often contains transaction and user data, but it may be encoded (e.g., base64) or encrypted (e.g., using AES or RSA).
+
+    Check for any signs of encoding or encryption. If the payload is encoded (e.g., base64), you can decode it directly within Burp Suite or using an external tool like CyberChef.
+
+    Example:
+
+    Payload=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0c3QiOiJKU1M2R0EySklkOjo2OGs1Zm9lKX6Q==
+
+    If the payload is encrypted, you may need to decrypt it by identifying the encryption method (AES, RSA) or using keys if available.
+
+3. Verify Browser Field Values:
+
+    For both Lookup and Challenge requests, the browser sends fields that can be used to verify the authenticity of the request.
+    These fields include parameters like BrowserJavaEnabled, BrowserHeader, and others that confirm details about the user's browser.
+
+Common Browser Fields:
+
+    BrowserJavaEnabled: This flag indicates whether Java is enabled in the browser.
+
+    BrowserHeader: Includes details about the user’s browser and operating system.
+
+    Example of such fields in a request:
+
+BrowserJavaEnabled=true
+BrowserHeader=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36
+

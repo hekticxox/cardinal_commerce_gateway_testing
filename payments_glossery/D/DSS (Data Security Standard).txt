@@ -1,0 +1,5 @@
+DSS (Data Security Standard)
+
+PCI-DSS (Payment Card Industry Data Security Standard). Common standards for merchants and third parties resulting from the alignment of Mastercard, Visa, and other card networks with the similar goal of protecting payment card account data wherever it is received or stored.
+
+Cardinal is PCI-DSS Level 1 certified

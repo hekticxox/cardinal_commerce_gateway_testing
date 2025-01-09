@@ -1,0 +1,3 @@
+Transactions
+
+Transactions are initiated between a merchant and a consumer for the sale or rental of goods or services.

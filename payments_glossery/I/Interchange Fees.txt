@@ -1,0 +1,3 @@
+Interchange Fees
+
+Fee paid (percentage of each transaction) by the acquirer to card issuing banks. Covers cost of fraud, accounts paying off monthly balances, etc. Mastercard and Visa have multiple interchange fees, based on card type, merchant type, and market data requirements that cover the risk of loss and the cost of processing the transaction.

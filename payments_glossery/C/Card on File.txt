@@ -1,0 +1,3 @@
+Card on File
+
+Card details are stored in a consumer account with a merchant or digital wallet provider in order to streamline the checkout process for returning customers. This can be used for one-click payments, pay-per use services, or any recurring payment that does not follow a fixed schedule.

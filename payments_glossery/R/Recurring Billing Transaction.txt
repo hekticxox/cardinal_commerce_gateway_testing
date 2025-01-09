@@ -1,0 +1,3 @@
+Recurring Billing Transaction
+
+A recurring billing transaction indicates that a similar transaction is submitted multiple times over a period of time. This flag is sent to the processor during authorization indicating that this is a recurring billing transaction.

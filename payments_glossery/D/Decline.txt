@@ -1,0 +1,3 @@
+Declined
+
+Transactions that are not approved are marked as declined. These transactions may not be captured and submitted for settlement. When a transaction is declined, the cardholder may opt to choose another form of payment to complete their order or contact their card issuer for more details related to the declined payment.

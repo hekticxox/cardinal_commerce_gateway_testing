@@ -1,0 +1,3 @@
+Merchant Identification Number (MID)
+
+A number each merchant is provided under the card acceptance agreement with their acquiring bank(s), which is unique to that merchant. The merchant account also reconciles authorizations, captures, and settlement processes, along with interchange fees and rates, for the cost of business.

@@ -1,0 +1,5 @@
+Application Programming Interface (API)
+
+A package of software, tools, documentation, and definitions designed to allow software developers to seamlessly access a software service or application. APIs allow a user to complete an action without leaving your website.
+
+Many of Cardinal’s integration methods for merchants and issuers connect to our products and services using a single or hybrid API-based solution!

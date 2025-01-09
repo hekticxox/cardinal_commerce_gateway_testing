@@ -1,0 +1,3 @@
+One-Time Passcode (OTP)
+
+A passcode that is only good for one login session or transaction. OTPs avoid shortcomings associated with static passwords in that they are not vulnerable to replay attacks. A potential fraudster using a one-time passcode that has previously been used will not be able to abuse it, since it will no longer be valid.

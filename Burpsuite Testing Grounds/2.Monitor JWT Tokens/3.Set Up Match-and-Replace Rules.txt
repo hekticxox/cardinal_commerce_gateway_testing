@@ -1,0 +1,10 @@
+Step 3: Set Up Match-and-Replace Rules
+
+If you want to automatically replace or modify JWT tokens, Burp Suite's Match and Replace feature can help:
+
+    Go to Proxy → Options.
+    Under Match and Replace, click Add.
+    You’ll be prompted to specify:
+        Match: Define what part of the JWT you want to match. For example, you can match the Authorization header containing Bearer <JWT>.
+        Replace: Define what you want to replace it with. This can be another JWT or any specific string.
+    After setting up your match-and-replace rule, Burp will automatically replace the JWT with the one you've defined, allowing you to manipulate requests for testing.

@@ -1,0 +1,5 @@
+ECI (Ecommerce Indicator)
+
+An indicator flag for all transactions that are generated via ecommerce. This flag is intended to identify all ecommerce transactions to the banking network. It is a decimal 2-digit value passed in authorization messages.
+
+3-D Secure programs use ECI values to indicate if the transaction was authenticated, attempted to be authenticated, or not authenticated.

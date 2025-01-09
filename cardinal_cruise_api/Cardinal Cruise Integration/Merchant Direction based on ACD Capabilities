@@ -1,0 +1,36 @@
+Merchant Direction based on ACS Capabilities
+Suggest Edits
+All Card Brands
+
+ACS Capability	Description	Merchant Direction
+AuthenticationAvailableAtACS	ACS supports EMV 3DS (3DS 2.0) authentication	Merchant may need to proceed with the EMV 3DS request.
+AttemptsSupportedByACS/DS	Attempts supported by ACS or DS	Merchant may need to proceed with the EMV 3DS request.
+DecoupledAuthentication	Decoupled Authentication is an authentication method whereby authentication can occur independent from the cardholder’s experience with the 3DS Requestor.	Merchants may need to pass the required fields for Decoupled Authentication.
+TrustlistSupport	Indicates that the ACS supports Trusted Beneficiary exemption	Merchants may need to pass the required fields for Trustlist Exemption Support.
+Visa
+
+ACS Capability	Description	Merchant Direction
+DataOnly	Card Range is enrolled in Visa Data Only	Merchants may need to pass the required fields for Visa Data Only Support.
+DelegatedAuthentication	Card Range is enrolled in Visa Delegated Authentication program	Merchants may need to pass the required fields for Visa Delegated Authentication program
+DAF	Card Range is enrolled in Visa Digital Authentication Framework program	Merchants may need to pass the required fields for Digital Authentication Framework.
+IssuerTRA	Card Range is enrolled for Issuer Transaction Risk Analysis (TRA)	Merchants needs to set Challenge Indicator value to 05 to indicate Issuer Transaction Risk Analysis (TRA).
+MasterCard
+
+ACS Capability	Description	Merchant Direction
+SmartAuthenticationStandInServiceOnly	Card Range is enrolled is Smart Authentication Stand-In Service Only	Merchant may need to proceed with the EMV 3DS request.
+SmartAuthenticationDirect	Card Range is enrolled in Smart Authentication Direct	Merchants may need to pass the required fields for Smart Authentication Direct.
+PaymentAuthenticationSupport	Card Range supports payment transactions	Supports MessageCategory = 01
+NonPaymentAuthenticationSupport	Card Range supports nonpayment transactions	Supports MessageCategory = 02
+AppChannelSupport	Card Range supports the app channel	Supports DeviceChannel= 01
+BrowserChannelSupport	Card Range supports the browser channel	Supports DeviceChannel = 02
+AppBasedIssuerChallengeSupport	Card Range supports appbased ACS/Issuer Challenge Capabilities	Supports Challenge flows for DeviceChannel = 01
+BrowserBasedIssuerChallengeSupport	Card Range supports browser-based ACS/ Issuer Challenge Capabilities	Supports Challenge flows for DeviceChannel = 02
+IdentityCheckExpress	Card Range is Enrolled in Identity Check Express	Merchants may need to pass the required fields for Identity Check Express.
+DelegatedAuthentication	Card range supports Authentication Express Merchant Delegation for Identity Check Express (Type I)	Merchants may need to pass the required fields for Identity Check Express.
+LowFraudDelegation	Card range supports Authentication Express Low Fraud Merchant (Type II)	Merchants may need to pass the required fields for Identity Check Express.
+AuthenticationExpressWalletDelegation	Card Range participates in Authentication Express Wallet Delegation	Merchants may need to pass the required fields for Identity Check Express.
+AuthenticationExpressDeviceDelegation	Card Range participates in Authentication Express Wallet Delegation	Merchants may need to pass the required fields for Identity Check Express.
+Amex
+
+ACS Capability	Description	Merchant Direction
+CardRangeSubjectToPSD2	This card range is subject to PSD2 requirements. Merchants in the EU/EEA should also ensure that authentication is available for this card range and SafeKey version	Merchant may need to proceed with the EMV 3DS request.

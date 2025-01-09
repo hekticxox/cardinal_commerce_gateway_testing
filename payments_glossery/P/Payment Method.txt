@@ -1,0 +1,3 @@
+Payment Method
+
+The form of payment provided against a transaction. In the case of payment of credit or debit card charges or refunds, the payment method reflects the type of payment or card. All transactions entered through the system must contain a valid payment method.

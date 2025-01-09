@@ -1,0 +1,3 @@
+Visa Secure
+
+This is an EMV 3-D Secure program offered by Visa to increase security and reduce fraud on internet-initiated purchases. The merchant’s website interfaces with a 3DS Server to connect to the Visa program and Directory Server to obtain the specified fields at the time of purchase. The authentication value results are then submitted with the authorization request to verify that it is an authentic cardholder purchase.

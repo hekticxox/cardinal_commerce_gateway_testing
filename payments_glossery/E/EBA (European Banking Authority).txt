@@ -1,0 +1,7 @@
+EBA (European Banking Authority)
+
+The EBA is an independent EU Authority which works to ensure effective and consistent prudential regulation and supervision across the European banking sector.
+
+Cardinal works with European issuers and merchants to offer 3-D Secure services which help comply with the Second Payment Services Directive (PSD2) requirement for Strong Consumer Authentication (SCA) on all remote commerce transactions. (Unless the transaction is out of scope or an exemption applies).
+
+For more information on PSD2 SCA, please refer to the EBA website: https://eba.europa.eu/regulation-and-policy/payment-services-and-electronic-money

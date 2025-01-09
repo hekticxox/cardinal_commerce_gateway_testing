@@ -1,0 +1,5 @@
+Consumer Authentication
+
+The term used to describe tools intended to verify that the person making the transaction is actually the person authorized to do so, both in-person and not-present transactions of all kinds. Consumer authentication is widely used (outside of 3-D Secure) through many platforms such as logging into a mobile banking application, accessing email accounts, mobile devices, and more. As fraud and account takeovers happen in many different mainstreams, consumer authentication or two-factor authentication is necessary to protect identities and passwords.
+
+Cardinal offers consumer authentication products for acquirers, issuers, merchants, and processors around the globe.

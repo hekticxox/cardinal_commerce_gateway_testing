@@ -1,0 +1,22 @@
+Step 2: Use Burp Extensions to Decrypt and Analyze JWTs
+
+There are Burp extensions that can help you inspect and manipulate JWT tokens with ease. Two notable ones are JWT Editor and JSON Web Token.
+Installing the JWT Editor Extension:
+
+    Open Burp Suite.
+    Go to the Extender tab and select BApp Store.
+    Search for the JWT Editor extension and click Install.
+    Once installed, go to the Extender tab → JWT Editor. This will show you an interface to manipulate JWT tokens.
+    
+    How to Use the JWT Editor:
+
+    Capture a JWT from one of your intercepted requests, like the /Collect or /Cruise/StepUp request that contains the Authorization: Bearer <JWT> header.
+    Right-click on the JWT in the request, then select JWT Editor.
+    The JWT Editor will allow you to:
+        Decode the JWT (header, payload, and signature).
+        Inspect the payload to analyze its claims, such as sub, exp, or custom fields.
+        Edit the payload if needed for testing purposes (e.g., changing user roles, expiration time).
+    The JWT is usually split into three parts:
+        Header: Contains the algorithm used (e.g., HS256).
+        Payload: Contains the claims (e.g., user info, roles, etc.).
+        Signature: Verifies the token's integrity.

@@ -1,0 +1,310 @@
+Enrolling a User
+Suggest Edits
+
+To enroll in VPP the user’s device must have platform authenticators such as Face ID or Touch ID and the browser in use must be VPP compatible. Currently, Cardinal can only enroll Visa branded cards.
+
+    📘
+
+    Note
+
+    Both the Enrollment Flow and the Authentication Flow use the same endpoints, the difference between the flows is not the endpoints but the order in which the steps are taken.
+
+Compatibility Check with FIDO Init Request with JWT
+
+To do a compatibility check the integrator will use Cardinal's new endpoint to ensure that users meet the basic requirements for Visa Payment Passkey (VPP).
+
+(See picture CompatibilityCheck.png)
+
+Generating an iFrame
+
+Below is a simple way to generate an iframe while meeting Cardinal’s requirements.
+
+    Cardinal requires a JWT to be generated on the backend
+    The backend will then render the JWT in the hidden JWT field
+    The page loads in the browser and auto-submits the form to the iframe.
+
+Once the form is submitted the parent page can’t read the content loaded within the iframe.
+
+FIDO Initialize Session Code Sample:
+
+ <iframe name='fidoInitializeIFrame' height="10" width="10" style="visibility: hidden; position: absolute; top: -1000px; left: -1000px;"> </iframe>
+<form id="fidoInitializeForm" target="fidoInitializeIFrame" name="fidoInitialize" method="POST" action="
+https://centinelapistag.cardinalcommerce.com/V2/FIDO/Init">
+ <input type="hidden" name="JWT" value="Transactional JWT generated per specification" />
+</form>
+<script>window.onload = function () {
+    // Auto submit form on page load
+    document.getElementById('fidoInitializeForm').submit();
+  }
+</script>
+
+This is a HTML snippet that contains an iframe, a form, and a JavaScript. This example shows a simple way to inject an iframe on page load
+
+<iframe> : It's a HTML element used to embed another HTML document within the current HTML document. The given iframe is named 'fidoInitializeIFrame' and is hidden from view (with visibility set to 'hidden' and positioned off-screen).
+
+<form>: The form is configured to POST to the URL 'https://centinelapistag.cardinalcommerce.com/V2/FIDO/Init', and the target of this form submission is the previously mentioned iframe. This form includes a hidden input field named 'JWT' and the value is set as 'Transactional JWT generated per specification'. This suggests that a JSON Web Token should be generated and inserted into this field as part of the form submission data.
+
+<script>: When the window is loaded, the script automatically submits the form with id 'fidoInitializeForm'. This means that as soon as the HTML page loads, the form will be submitted automatically without any user interaction.
+
+In summary, when this HTML page is loaded, it automatically submits a form containing a JWT to a specified URL, and the response from that submission will be loaded into a hidden iframe.
+
+For more information go to Creating an Iframe
+Post to /FIDO/Init with JWT
+
+The /FIDO/Init request uses the same JWT request format as other Cardinal Cruise endpoints. See our existing JWT documentation, JWT Overview, for instructions on creating and formatting the base JWT.
+When the customer lands on the merchant page, the integrator should create a hidden iframe and call the new /FIDO/Init endpoint with the new field merchant origin located in the payload.
+
+MerchantOrigin is required to match the window.origin and must include
+
+    A scheme of https.
+    A top-level domain
+    If an integrator sends a port, it must be 443.
+
+Merchatn
+
+{  
+  "iss": "ApiKeyId",  
+  "jti": "6325c60f-d31c-4450-8184-30699ebac69c",  
+  "iat": 1448997865,  
+  "OrgUnitId": "MyOrgUnit",  
+  "ReturnUrl": "<https://onlinestore.com/myreturn">,  
+  "ObjectifyPayload": true,  
+  "Payload": {  
+     "MerchantOrigin": "<https://onlinestore.com">  
+  }  
+}
+
+FIDO Init Response with JWT
+
+Receiving a successful response will include a JWT payload with a ReferenceId value used for all subsequent calls in a VPP transaction.
+
+\`{  
+  "iss": "5f0780aeadf32541e357357a",  
+  "iat": 1715173482,  
+  "exp": 1715180682,  
+  "jti": "6325c60f-d31c-4450-8184-30699ebac69c",  
+  "aud": "739debe0-799e-43fd-8bab-e254340cd745",  
+  "Payload": {  
+    "ReferenceId": "1234-12345-1234-1234",  
+    "ErrorNumber": 0,  
+    "ErrorDescription":"Success"  
+  }  
+}
+
+    🚧
+
+    Be sure to validate your JWT.
+
+
+Registration Check
+
+Integrators use the Data Exchange API (DX API) to determine whether a user is already enrolled in Visa Payment Passkey (VPP). The DX API is a versatile set of endpoints that provide additional information and real-time insights into the transaction process prior to authentication. In the context of FIDO, the DX API’s /Encrypted/GetInfo endpoint is leveraged to determine the VPP enrollment status of the cardholder, as well as what authentication programs are supported by the PAN’s ACS.
+
+If you are not already integrated to the Data Exchange API we recommend going to: Data Exchange API Reference
+
+(see picture PasskeyRegistered.png)
+
+Data Exchange Request
+
+Listed below is the Data Exchange request with the new Payment Object and the following listed fields added for VPP:
+
+Payment Object:
+
+    Amount- An unformatted total transaction amount.
+    CurrencyCode- A 3-digit numeric ISO 4217 currency code for the sale amount.
+    MerchantName- The name of the merchant requesting the FIDO transaction.
+
+New Fields not in the Payment Object:
+
+    LanguagePreference- An array to indicate the supported language preference with the ISO 639-1 alpha-2 code, which consists of two-letter codes for languages.
+    `Email - The cardholder's email.
+
+When sending to the /Encrypted/GetInfo endpoint be sure to include the same ReferenceId value returned by Cardinal from the /FIDO/Init response.
+
+{  
+  "Signature": "KmL2SLBeTRRU9TlxA6XfnAYg5yWn1QwEO0GL1RtP8mg=",  
+  "Timestamp": "2024-02-21T20:10:20.872Z",  
+  "Identifier":"59c282d02f3e7357b4aa6f13",  
+  "OrgUnitId": "59c2745f2f3e7357b4aa516a",  
+  "Algorithm": "SHA-256",  
+  "Payload": {  
+    "AccountNumber": "400009**\*\***0800",  
+    "CardBrand":"Visa",  
+    "AcquirerCountryCode": "840",  
+    "LanguagePreference": ["en", "es"],  
+    "ReferenceId": "12345-1234-123145-1423",  
+    "Email": "[someone@somewhere.com](mailto:someone@somewhere.com)",  
+    "Payment": {  
+      "Amount": "12.34",  
+      "CurrencyCode": "USD",  
+      "MerchantName": "Merchant",  
+     }  
+   }  
+ }
+
+Handling the Data Exchange Response
+
+When you receive a response that has the new FIDO sub-object with the following new fields:
+
+    FlowType -Determines whether the integrator can enroll or authenticate the cardholder using FIDO.
+    ReasonCode - Present when failure is returned in the FlowType field.
+    ReasonDescription- Present when failure is returned in the FlowType field.
+
+
+The integrator should expect to receive a Flow Type of "Enrollment" for an enrollment flow as shown in the sample code below:
+
+{  
+    "ErrorNumber": "0",  
+    "ErrorDescription": "Success",  
+    "RequestId": "b3933183-48df-409f-94ff-12952364009b",  
+    "Payload": {  
+        "Account": {  
+            "CardBrand": "Visa",  
+            "LastFour": "0094",  
+            "FIDO": {  
+                "FlowType": "ENROLLMENT",  
+                "ReasonCode": "0",  
+                "ReasonDescription": "Success"  
+            }  
+        },  
+        "Issuer": {  
+            "SupportedVersions": \[  
+                {  
+                    "Version": "2.1.0",  
+                    "Capabilities": [  
+                        "AuthenticationAvailableAtACS",  
+                        "DAF"  
+                    ],  
+                    "MethodURLPresent": "true",  
+                },  
+                {  
+                    "Version": "2.2.0",  
+                    "Capabilities": [  
+                        "AuthenticationAvailableAtACS",  
+                        "DecoupledAuthentication",  
+                        "DataOnly",  
+                        "DelegatedAuthentication",  
+                        "IssuerTRA",  
+                        "DAF"  
+                    ],  
+                    "MethodURLPresent": "true",  
+                }  
+            ]  
+        }  
+ }
+
+EMV® 3DS SCA Transaction
+
+For a user to be enrolled into Visa Payment Passkey Service, they will need to go through a successful 3DS SCA challenge. The steps for a challenge request are similar to Cardinal Consumer Authentication.
+
+Every 3DS SCA transaction will require Device Data Collection, a cmpi_Lookup Request/Response, a Stepup URL, and the cmpi_Authenticate Request/Response. For more information on these steps go to Cardinal Cruise API
+
+The following instructions will point out key differences from the Cruise Integration.
+Device Data Collection
+
+The Device Data Collection process remains unchanged from its implementation in normal 3DS authentication with one important caveat:
+
+When using DDC with FIDO, theReferenceIdin the DDC call must be the same ReferenceId returned by the Data Exchange API in step 2.
+
+After Device Data Collection is complete, the integrator will then run the cmpi_ lookup request.
+CMPI Lookup Resquest to Centinel
+
+The cmpi_lookup request call is part of the Cardinal Cruise API. An overview of this request call and its responses can be found in our Lookup Request (From Previous Space) documentation. The cmpi_lookup request has required fields and extra, conditional fields that allow it to be configured for a specific purpose.
+
+The following fields are required for Visa Payment Passkey on the cmpi_lookup request:
+
+    Email
+    CardNumber (PAN)
+    DFReferenceId
+    ChallengeIndicator
+    CurrencyCode
+    Amount
+
+The Email, CardNumber (PAN), DFReferenceId, Amount and CurrencyCode are required fields in the cmpi_lookup, and these fields must match what was sent earlier in the registration check.
+
+    🚧
+
+    FYI
+
+    The integrator must convert the amount value from decimalized on the Registration Check to non-decimalized on the cmpi_lookup request. Example: 28.53 to 2853
+
+Conditional Field for CMPI Lookup
+
+In the context of the VPP Enrollment Flow, the following conditional fields are required.
+Field	Type	Required	Description
+ChallengeIndicator	N(2)	Y	For VPP enrollment flow the Challenge Indicator should either be:
+
+03 = Challenge requested (3DS Requestor Preference)
+
+04 = Challenge requested (Mandate)
+AlternateAuthenticationMethod	N(2)	Y	For VPP enrollment flow the Integrator should send the value of:
+
+- 80
+Handling the cmpi_Authenticate Response
+
+After the cmpi_lookup request is sent with the required fields in the correct format then authentication continues as expected. A successful challenge is required to move forward with VPP enrollment. If the integrator does not receive a successful challenge response on the cmpi_lookup authenticate response, then the VPP enrollment flow **cannot continue.
+
+A new field has been added to the cmpi_authenticate response that is required for successful VPP enrollments. The new field is called FidoEligible and the integrator should expect a response of “This transaction is FIDO Eligible, please continue with FIDO Enrollment.” This new field can also be found in the Authenticate Response (cmpi_authenticate) spec.
+
+At this point 3DS authentication is complete and the integrator completes the order, but the cardholder still needs to enroll in Visa Payment Passkey.
+Enrolling the User
+
+(see picture FidoEnrollment.png)
+
+Integrator Generates the Challenge Iframe
+
+Please review the code sample below for an example on how to best generate the Challenge iframe.
+
+<iframe name='fidoChallengeIframe' style= "position: relative; width:327px; height:393px; border:0px;" </iframe>
+<form id="fidoChallengeForm" target="fidoChallengeIframe" name="fidochallenge" method="POST" action="
+https://centinelapistag.cardinalcommerce.com/V2/FIDO/Challenge">
+<input type="hidden" name="JWT" value="Transactional JWT generated per specification" />
+</form>
+<script>window.onload = function () {
+        // Auto submit form on page load
+        document.getElementById('fidoChallengeForm').submit();
+      }
+</script>
+
+
+Visa Payment Passkey Enrollment Request with JWT
+
+The /FIDO/Challenge request uses the same JWT request format as other Cardinal Cruise endpoints. See our existing JWT Overview documentation for instructions on creating and formatting the base JWT. As with other specialized uses of JWTs in the API, the challenge JWT has a Payload object that contains Enroll specific claims, as well as two extra claims in the main body: ReferenceId and ReturnURL.
+
+{  
+   "iss": "MyMerchant-Api-Key-Id",  
+   "jti": "My-UUID-for-this-request",  
+   "iat": 1448997865,  
+   "OrgUnitId": "M59c2745f2f3e7357b4aa516a",  
+   "ReturnUrl": "<https://onlinestore.com/myreturn">,  
+   "ObjectifyPayload": true,  
+   "ReferenceId": "1234-54322-12354-6454"  
+ }
+
+
+After the request has been sent to Cardinal the cardholder will be prompted with enrollment and will fill out the form and complete the challenge. Cardinal then sends the challenge response.
+Visa Payment Passkey Enrollment Response with JWT FIDO Challenge Response with JWT
+
+The /FIDO/Challenge endpoint will return the response as a JWT like most Cardinal Cruise API endpoints. This section details the Payload claim within the enroll JWT, which contains information unique to this endpoint. Please refer to the [JWT Overview] for more information on handling JWT responses.
+
+Sample Enrolled Challenge Response:
+
+{  
+  "iss": "MyMerchant-Api-Key-Id",  
+  "ref": "My-UUID-for-this-request",  
+  "iat": 1448997865,  
+  "exp": 1471021692,  
+  "OrgUnitId": "59c2745f2f3e7357b4aa516a",  
+  "ObjectifyPayload": true,  
+  "Payload": {  
+     "ChallengeState": "ENROLLED",  
+     "ReferenceId": "1234-54322-12354-6454",  
+     "ErrorNumber": 0,  
+     "ErrorDescription": "Success"  
+    }  
+}
+
+
+When the challenge is received the cardholder is both enrolled and authenticated with Visa Payment Passkey.
+
+If a failure occurs, then Cardinal recommends continuing with a 3DS SCA transaction without VPP.

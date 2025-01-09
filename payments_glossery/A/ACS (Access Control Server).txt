@@ -1,0 +1,5 @@
+ACS (Access Control Server)
+
+ACS combines access security, authentication, user, and administrator access and policy control in a centralized identity framework. Card issuers and processors who wish to deploy an authentication strategy for their cardholder community rely on an ACS to support connectivity to a Network Directory Server, load their BIN portfolios, create risk rules based on data, evaluate the risk of a transaction request, and provide an authentication outcome, either Risk Based or Step-Up/Strong Customer Authentication (SCA).
+
+Cardinal’s Visa Consumer Authentication Service is a global ACS product offering available to our issuing and processing clients!

@@ -1,0 +1,3 @@
+Payment Service Provider (PSP)
+
+Company that provides merchants the online services to accept electronic payments by a variety of payment methods including credit card, debit card, bank transfer, and others. PSPs can connect to financial institutions and card and payment networks and manage relationships with them as a service to merchants.

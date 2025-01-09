@@ -1,0 +1,5 @@
+Internet of Things (IoT)
+
+This term refers to the interconnection of everyday devices (also called “smart devices”), embedded with computer chips and sensors, via the Internet. Smart speakers, wearable devices and smart appliances are examples of IoT devices.
+
+3-D Secure is expanding to support authentication services within these connected devices.

@@ -1,0 +1,5 @@
+Overview:
+
+Hidden iFrames and automatic form submissions are often used in online payment systems (including 3DS) to securely transmit data (like authentication tokens, customer info, etc.) without the user being aware of the transmission. These elements can be used for fraud prevention, authentication, and verification without user intervention.
+
+We’ll focus on how to capture and analyze requests from hidden iFrames and form submissions, as well as how to inspect WebSocket traffic to find any hidden communication between the client (browser) and server.

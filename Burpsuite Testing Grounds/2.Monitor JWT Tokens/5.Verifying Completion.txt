@@ -1,0 +1,70 @@
+Aight, Chapta, let's dive into Part 2: Monitoring JWT Tokens. JWTs (JSON Web Tokens) are crucial in maintaining authentication and user sessions in web applications. They're used to securely transmit information between parties and are often involved in API requests. In this section, you'll learn how to capture, inspect, and manipulate JWT tokens in Burp Suite to make sure you're handling them properly.
+Step 1: Configure Burp Suite Filters for JWTs
+
+You’ll need to make sure you're only focusing on the traffic that contains JWT tokens. This can be done by setting up some filters in Burp Suite.
+Set Up Filters to Capture JWTs
+
+    Open Burp Suite and go to the Proxy tab.
+    Go to the Intercept sub-tab.
+    Under Intercept is on, you’ll see the requests being captured. Right-click on a request that includes a JWT (usually in headers like Authorization: Bearer <JWT>), and select Send to Intruder or Send to Repeater.
+    Now go to the Target tab and right-click on the specific host or path you want to monitor, such as /Collect, /Cruise/StepUp, or /Authenticate. You’ll set filters for those endpoints.
+
+Step 2: Use Burp Extensions to Decrypt and Analyze JWTs
+
+There are Burp extensions that can help you inspect and manipulate JWT tokens with ease. Two notable ones are JWT Editor and JSON Web Token.
+Installing the JWT Editor Extension:
+
+    Open Burp Suite.
+    Go to the Extender tab and select BApp Store.
+    Search for the JWT Editor extension and click Install.
+    Once installed, go to the Extender tab → JWT Editor. This will show you an interface to manipulate JWT tokens.
+
+How to Use the JWT Editor:
+
+    Capture a JWT from one of your intercepted requests, like the /Collect or /Cruise/StepUp request that contains the Authorization: Bearer <JWT> header.
+    Right-click on the JWT in the request, then select JWT Editor.
+    The JWT Editor will allow you to:
+        Decode the JWT (header, payload, and signature).
+        Inspect the payload to analyze its claims, such as sub, exp, or custom fields.
+        Edit the payload if needed for testing purposes (e.g., changing user roles, expiration time).
+    The JWT is usually split into three parts:
+        Header: Contains the algorithm used (e.g., HS256).
+        Payload: Contains the claims (e.g., user info, roles, etc.).
+        Signature: Verifies the token's integrity.
+
+Step 3: Set Up Match-and-Replace Rules
+
+If you want to automatically replace or modify JWT tokens, Burp Suite's Match and Replace feature can help:
+
+    Go to Proxy → Options.
+    Under Match and Replace, click Add.
+    You’ll be prompted to specify:
+        Match: Define what part of the JWT you want to match. For example, you can match the Authorization header containing Bearer <JWT>.
+        Replace: Define what you want to replace it with. This can be another JWT or any specific string.
+    After setting up your match-and-replace rule, Burp will automatically replace the JWT with the one you've defined, allowing you to manipulate requests for testing.
+
+Step 4: Verifying and Debugging the JWT Handling
+
+    Inspect JWTs: Make sure you’ve correctly configured the filters and Burp is capturing JWTs.
+    Check Payload: Look for the claims in the JWT’s payload to ensure the authentication/authorization logic is what you expect.
+    Use JWT Editor: If you’re dealing with encrypted JWTs, the JWT Editor will help you view the raw payloads.
+    Manipulate and Re-test: Test scenarios by manipulating JWT values. For example, change the exp (expiration) claim or swap user roles, and see how the server responds.
+
+How to Verify Completion:
+
+    Capture JWTs from the relevant endpoints (/Collect, /Cruise/StepUp, /Authenticate).
+    Inspect JWT Payloads to confirm the contents are what you expect.
+    Use the JWT Editor to decode, inspect, and modify the JWT payload.
+    Verify Match-and-Replace Rules are correctly modifying the JWTs as required.
+
+Troubleshooting:
+
+    No JWT Captured?: Make sure the traffic is going through Burp and that you have properly configured the Proxy settings.
+    JWT Signature Validation Errors?: You may not be able to modify the JWT unless you can generate a valid signature for the token after editing. If the JWT is signed with a secret key, you'll need that key to re-sign it after modifying the payload.
+
+Extra Tip:
+
+For testing, you can use online JWT debug tools like jwt.io to decode JWT tokens and understand their structure better before applying it to Burp Suite.
+
+Let me know if you want to dive deeper into any specific part of this process, and I'll guide you through it, Chapta!
+

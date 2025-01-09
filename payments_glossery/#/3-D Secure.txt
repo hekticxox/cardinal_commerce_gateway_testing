@@ -1,0 +1,5 @@
+3-D Secure
+
+The name for a group of protocols designed as an additional security layer for online credit and debit card transactions. Each major credit card network has its own versions of 3-D Secure protocols. Authentication occurs prior to authorization and passes data elements based on the consumer session, device fingerprinting, transaction details and more into 3 domains. The domains consist of: 3DS Server (merchant’s 3DS vendor), Directory Server (card network), and an Access Control Server (ACS, issuer vendor or proprietary solution), that ultimately analyze the fraud risk of the transaction and validate the consumer who’s making a purchase. EMV 3DS expands consumer authentication support to non-payment requests, card-on-file additions, 3RI (recurring), in-app and more.
+
+Cardinal is a certified EMVCo vendor supporting three major components: 3DS Server, SDK, and ACS. Cardinal has been providing global authentication services for over two decades!

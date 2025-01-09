@@ -1,0 +1,3 @@
+Unauthorized Transaction
+
+Any sale or agreement for which a cardholder does not provide his/her specific authorization. (This should not be confused with the failure to receive an authorization response from the Issuer).

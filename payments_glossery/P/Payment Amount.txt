@@ -1,0 +1,3 @@
+Payment Amount
+
+The amount of a transaction submitted for authorization. This is the amount authorized against the specified payment method.

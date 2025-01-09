@@ -1,0 +1,3 @@
+Cardinal Consumer Authentication
+
+Cardinal’s rules-based Consumer Authentication solution which allow merchants and issuers to authenticate their consumers during digital transactions. Merchants can balance the risk of each transaction with their consumers’ preferences and needs.

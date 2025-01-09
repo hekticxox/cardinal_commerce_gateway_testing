@@ -1,0 +1,3 @@
+3DS Requestor Initiated (3RI)
+
+3RI is new to EMV 3DS and provides identification to what type of subsequent transaction requests are occurring. 3DS Requestor Initiated (3RI) is initiated by the 3DS Requestor (usually the merchant) for the purposes of confirming that an account is still valid or for cardholder authentication. For merchants, a 3RI transaction enables the ability to obtain authentication data (CAVV, ECI) in the absence of the cardholder for transactions previously authenticated. For issuers, a 3RI transaction’s prior transaction data improves risk management and provide secondary evaluation on a previously authenticated transaction.

@@ -1,0 +1,144 @@
+Creating and Customizing Popops
+Suggest Edits
+
+Cardinal requires the integrator to create a popup during the FIDO Authenticate Flow. This page includes information to support the integrator in popup creation
+Opening a popup
+
+MDN Documentation for opening a popup: window.open
+
+Below is a notated code sample:
+
+// The popup can have a name applied to it. This can be useful for using as a target for form submission
+let popupName = "myPopupName"
+// Configure how the popup should look when created
+let settings = "popup, height=480, width=400"
+// The return value is a reference to the popup created. This reference can be used to
+// determine if the popup was closed or if it had issues opening
+let popup = window.open(url, popupName, settings)
+
+Using a Form and Target
+
+The easiest way to direct a popup to POST data to an endpoint is to:
+
+    Create a popup with a set name
+    Open the popup with a URL of 'about:blank'. This will open the popup to an empty page
+    Inject a normal form into the page and set the form to target the popup name
+    Submit the form programmatically
+    The form will POST within the popup
+
+Form Submit Example
+
+// Set a name for the popup for the form to target
+let popupName = "myPopupName"
+// Configure how the popup should look when created
+let settings = "popup, height=480, width=400"
+// Set the URL to 'about:blank' to open to an empty page
+let popup = window.open('about:blank', popupName, settings)
+ 
+// Create a form
+let form = document.createElement('form');
+form.method = 'POST';
+form.url = "<some url>"
+// Set form target to the popup name
+form.target = popupName
+// Inject form into the body of the parent page
+document.body.appendChild(form);
+// Submit form
+form.submit();
+
+
+Use a Proxy Page
+
+An alternative is to create a new endpoint on your website that the popup opens to. This endpoint would render an auto submitting form into the popup to force the popup window to POST a request to an endpoint.
+
+    Create a proxy page that accepts a GET request
+    Proxy page renders a view that contains a auto submitting form
+    When creating a popup set the URL to the proxy page
+
+When using this flow be aware that it does introduce an additional page load to your applications proxy page.
+Positioning popup
+
+The below sample shows how you can set the position of the popup to be centered on the active window.
+
+Position Popup in Center of Browser Window
+
+// The popup can have a name applied to it. This can be useful for using as a target for form submission
+let popupName = "myPopupName"
+ 
+// Set the initial size of the popup window
+let popupHeight = "480"
+let popupWidth = "400"
+let settings = "popup, height=" + popupHeight, width=" + popupWidth
+ 
+// Get the size of the current window that will open the popup
+let parentHeight = window.outerHeight
+let parentWidth = window.outerWidth
+// Find the center of the current window and subtract the size of the popup window to find the top left corner coordinates
+let popupTop = (parentHeight / 2) - (popupHeight / 2)
+let popupLeft = (parentWidth / 2) - (popupWidth / 2)
+settings += ', top=' + popupTop + ', left=' + popupLeft
+ 
+let popup = window.open(url, popupName, settings)
+
+
+CSS Styling for a Popup
+
+For the Authentication workflow for Visa Payment Passkey, use the following size for your popup
+
+width: 400px;  
+height: 480px;
+
+
+Popup Blockers
+
+All major browsers have built-in popup blockers that prevent popups unless triggered by a user action. Often, browsers notify users in the address bar when a popup is blocked, but not all do. integrators must ensure their popups comply with browser restrictions by avoiding programmatic openings and only triggering them through user actions. Since popup blocking criteria differ across browsers, cross-browser testing is recommended to ensure popups are not blocked.
+What is a User Action?
+
+A user action is an intentional interaction, like clicking a button to start an operation on a website. Regarding popup blocking, simply relying on how the action was started isn't sufficient. Browsers may still block popups triggered by user actions depending on other ongoing events. The events causing popup suppression varies by browser, but generally, it's best to open popups immediately following the user action. Complex activities like AJAX calls may lead to popup suppression.
+
+For Example
+At the time of writing, Chrome is more lenient than Safari regarding popup blocking. For example, a popup implementation in Chrome might involve:
+
+    Triggers when a user clicks a button on the website by binding to the buttons onclick event
+    Create an AJAX request using jQuery library to my websites back end to do some processing task
+    AJAX response contains a Cardinal Request JWT to be used when opening the popup
+    JavaScript waits for AJAX to complete successfully then uses the JWT from the AJAX response to open a popup and submit a form to Cardinal.
+
+This works in Chrome but fails in Safari due to the AJAX request. To ensure compatibility, avoid complex workflows and open popups immediately following user actions. Cross-browser testing is crucial to ensure consistent behavior across different browsers.
+Detecting if a popup has closed
+
+When a popup is created it includes the close buttons a normal browser does. This close button will close the popup window, preventing Cardinal from being able to return any results to the integrator. If the integrator decides to not implement a close window scanner, there will be scenarios where the end user has terminated the FIDO flow that the integrator will be unaware of. Depending on the integrator's site and integration this could result in an end user being stuck on a integrator page without being able to move forward. We recommend that a full feature implementation include the use of the popup close scanner.
+
+The concept here it to create a block of code that runs at a fast interval, that does a very simple check on if the window is closed. In the event that the window is closed, it will stop the interval scanning and then take some sort of action. Review the following to ensure a smooth implementation:
+
+    Since the scanning code is going to be run at a short interval it's important that the code ran each interval is simple and can execute quickly. If the code takes too long to process, it’s possible the code from one interval is still running when the next interval tick triggers, causing the browser to block the next tick execution. This may negatively impact the end user's browser performance and can impact website performance or even lock up the browser entirely.
+
+    🚧
+
+    FYI
+
+    To prevent negative impact, we recommend that the only code being run on each iteration is the check to see if the popup is closed. Once the popup is closed then run additional code.
+
+    Always clear your interval when you detect the popup is closed. We recommend that clearing the interval be the first action you take when detecting the popup is closed. Failure to clear the interval will mean the code will continue to run and re-execute the closed popup logic. This will likely result in JavaScript exceptions triggering at each interval.
+    Choose an interval time that fits your needs
+
+    📘
+
+    Browser API Documentation for Reference:
+
+    clearInterval
+
+// Create a interval that triggers code at a cadence, in this case it runs once every second
+let loop = setInterval(function () {
+    // Code to run on each interval - Check to see if our popup is closed
+    if (popup.closed) {
+        // If closed, stop the interval
+        clearInterval(loop);
+        // Run any additional code needed in a closed scenario
+    }
+}, 1000);
+
+
+Window.onload
+
+We do not recommend relying on the window.onload event to determine if a popup window has been closed. For the use of determining if the window has been closed, it will be unreliable.

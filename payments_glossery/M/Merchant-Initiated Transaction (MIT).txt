@@ -1,0 +1,5 @@
+Merchant-Initiated Transaction (MIT)
+
+Merchant-Initiated Transactions are transactions where the buyer is not present, and as the name suggests, the merchant initiates the transaction. MITs can be at fixed or variable intervals and of fixed or variable amounts. They can be set as installments, recurring transactions and more, but are mainly used in the travel and hospitality sector. The key with MITs is that there is an agreement between the consumer and the merchant that once set up, allows the merchant to initiate subsequent payments.
+
+MIT transactions are supported in EMV 3-D Secure under 3RI for recurring transactions for support of the agreement, tying subsequent transactions back to the initial consumer purchase and authentication session.

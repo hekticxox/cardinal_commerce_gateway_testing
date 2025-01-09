@@ -1,0 +1,5 @@
+Gateway
+
+The middleman between an ecommerce website and the payment processor that receives the payment from the consumer. Once a consumer uses their credit or debit card, the payment gateway sends the data securely to the payment processor to authorize the transaction and make sure the data entered is enough to finalize payment. Gateways may offer other services such as address verification, CVV2 validation, and fraud prevention services.
+
+Cardinal’s sister company, CyberSource (also a Visa solution), is one of the largest gateway providers around the globe.

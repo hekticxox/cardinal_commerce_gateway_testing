@@ -1,0 +1,3 @@
+Primary Account Number (PAN)
+
+A numerical code, usually up to 16 digits, which uniquely identifies a cardholder’s account when the account is opened. The first six to nine numbers identify the card network and issuer, the next set of digits signifies the cardholder, and the remaining digits are used for security purposes.

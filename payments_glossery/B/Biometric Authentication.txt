@@ -1,0 +1,3 @@
+Biometric Authentication
+
+Biometric authentication uses a unique physical component on your body to validate your identity such as a fingerprint scan or facial recognition technology.

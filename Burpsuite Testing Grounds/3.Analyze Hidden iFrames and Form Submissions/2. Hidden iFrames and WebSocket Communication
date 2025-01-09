@@ -1,0 +1,87 @@
+Let's break down part 3 of your request: Analyzing Hidden iFrames and Form Submissions in the context of 3DS (3D Secure) authentication.
+Overview:
+
+Hidden iFrames and automatic form submissions are often used in online payment systems (including 3DS) to securely transmit data (like authentication tokens, customer info, etc.) without the user being aware of the transmission. These elements can be used for fraud prevention, authentication, and verification without user intervention.
+
+We’ll focus on how to capture and analyze requests from hidden iFrames and form submissions, as well as how to inspect WebSocket traffic to find any hidden communication between the client (browser) and server.
+1. Capture and Review Requests Originating from Forms
+
+In this step, we'll deal with form submissions, particularly from the collectionForm and stepup forms, which likely contain sensitive user data related to authentication.
+Step 1: Intercepting Form Submissions in Burp Suite
+
+    Configure Burp Suite to act as a proxy between your browser and the application you’re testing. Set up the browser's proxy settings to use Burp (usually 127.0.0.1:8080).
+
+    Navigate to the relevant pages that involve the collection and stepup forms (likely on the 3DS flow) while Burp Suite is intercepting traffic. If the forms are hidden or embedded in iframes, you can still capture requests by inspecting the entire HTML/JS traffic.
+
+    Inspect Form Submissions:
+        Go to the HTTP history tab in Burp Suite's Proxy tab.
+        Filter requests to identify POST requests with form data.
+        Look for form fields and examine the request payloads for hidden fields like JWTs, session tokens, or other authentication data being submitted.
+
+    Reviewing Parameters:
+        Examine the POST data. The collectionForm and stepup forms likely have fields that contain key information, like:
+            Authentication tokens
+            Payment details (masked)
+            Card information (if relevant)
+        If the form submission involves JSON, ensure you're checking for the Content-Type header (application/json).
+        For HTML forms, the Content-Type will often be application/x-www-form-urlencoded, and you will see key-value pairs in the body of the request.
+
+    Example Form Submission:
+
+    <form action="https://example.com/collect" method="POST">
+        <input type="hidden" name="auth_token" value="xyz123">
+        <input type="hidden" name="3ds_token" value="abc456">
+        <input type="submit" value="Submit">
+    </form>
+
+    This form might post a JWT token or other authentication information that you can intercept and analyze.
+
+Step 2: Review HTTP/HTTPS Traffic
+
+While the forms are submitting data, use Burp Suite's Intercept tab to manually inspect requests in real time. Here's what to focus on:
+
+    Look for any hidden fields (like auth_token, 3ds_token, or session tokens).
+    If you see any encrypted data or tokens, you’ll need to analyze them in later steps (like decoding JWT tokens, if necessary).
+
+2. Hidden iFrames and WebSocket Communication
+
+Hidden iFrames are commonly used to load external resources like 3DS authentication pages or background tasks without alerting the user. Automatic form submissions can be used in these iFrames to send data in the background, usually for authentication purposes.
+Step 1: Inspect Hidden iFrames in HTML
+
+    Load the Page in Browser:
+        Look for any <iframe> tags embedded within the page’s source code. These can be hidden through CSS properties like display: none or visibility: hidden.
+
+    Use Burp Suite’s Spider Tool:
+        Spider the target website to capture the entire page, including content loaded in hidden iFrames. This will help you identify iFrames that might not be visible in the browser but are still actively participating in the 3DS flow.
+
+    View Source/Inspect the Network Tab:
+        In the browser's Developer Tools (press F12 in most browsers), go to the Network tab and look for requests coming from iFrames. Often, iFrames communicate with external servers using methods like AJAX, WebSockets, or simple HTTP requests.
+        Look for any requests that originate from hidden sources (such as iFrame URLs). You can inspect those requests in Burp Suite's HTTP History.
+
+Step 2: Analyzing iFrame Traffic in Burp Suite
+
+    If the iFrame interacts with a separate domain (such as a 3DS authentication provider), you’ll want to add that domain to your Target Scope in Burp Suite to ensure its traffic is captured.
+
+    Example:
+        If the iFrame is contacting a URL like https://3ds-provider.com/authenticate, you should explicitly add that to Burp Suite's Target Scope.
+
+Step 3: WebSocket Traffic
+
+Modern applications often use WebSockets for real-time communication. This is particularly relevant if you're seeing dynamic changes on the page without new HTTP requests (like real-time card authorization).
+
+    Monitor WebSocket Traffic:
+        Burp Suite can intercept WebSocket connections through the Proxy tab, just like regular HTTP/HTTPS traffic.
+        Look for WebSocket requests in the HTTP History or use Burp Collaborator to detect unusual WebSocket behaviors.
+
+    WebSocket Messages:
+        If the 3DS system uses WebSockets, look for messages being passed in these connections. You can inspect the payload of WebSocket frames to analyze any authentication-related data being transmitted.
+
+    Example WebSocket message:
+
+{
+  "status": "3ds_challenge",
+  "challenge_token": "xyz987",
+  "user_id": "12345"
+}
+
+The WebSocket might carry authentication-related information or tokens needed to proceed with the 3D Secure process.

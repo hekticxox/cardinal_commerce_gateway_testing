@@ -1,0 +1,3 @@
+Issuing bank
+
+The bank that holds the customer’s credit or debit card account. The issuing bank settles funds to the acquiring bank for payment to the merchant and bills the cardholder for transactions at a later date.

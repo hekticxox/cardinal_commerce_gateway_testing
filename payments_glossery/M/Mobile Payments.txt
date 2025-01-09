@@ -1,0 +1,3 @@
+Mobile Payments
+
+Using a mobile phone to pay for a wide range of services, both digital and hard goods. Mobile payments can be made using direct operator billing (or WAP billing) allows the charges to be added to the user’s mobile bill. Mobile payments can also be made using a payment card or mobile wallet.

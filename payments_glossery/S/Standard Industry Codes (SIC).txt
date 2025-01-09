@@ -1,0 +1,3 @@
+Standard Industry Codes (SIC)
+
+Special numbers assigned by the card networks to seller types for identification and tracking purposes. Mastercard uses MCC (Seller Category Code), while Visa uses SIC (Standard Industry Codes).

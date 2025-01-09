@@ -1,0 +1,282 @@
+Cardinal Cruise Integration
+
+Included are the steps to integrate to Cardinal Consumer Authentication via browser.
+Suggest Edits
+Overview
+
+Cardinal Cruise Integration is an API-based implementation that supports EMV 3DS. This integration allows the integrator to use an iframe to complete the device profiling and 3DS authentication requirements without the need for including 3rd party JavaScript directly on your site. This implementation does still require the use of JavaScript on the page.
+Device Data Collection with the Data Exchange API
+
+To the get EMV 3DS required browser data elements to make the 3DS request and invoke the Method URL integrators will post to the /Encrypted/GetInfo endpoint with the account number wrapped in a JWT
+
+{
+  "Signature":"gFM3PI3JHoz9ammwXmLryRi7Mq+lxCbOTOFCyd3aNSM=",
+  "Timestamp":"2024-02-21T20:12:39.307Z",
+  "Identifier": "59c282d02f3e7357b4aa6f13",
+  "OrgUnitId": "59c2745f2f3e7357b4aa516a",
+  "Algorithm": "SHA-256",
+  "OrgUnitId": "59c2745f2f3e7357b4aa516a",
+   "Payload": {
+      "AccountNumber": "400009******0800",
+      "CardBrand":"CB",
+      "AcquirerCountryCode": "840"
+  }
+}
+
+Generate an Authentication JWT
+
+Integrators must use the ReferenceID returned from the DXAPI call to create and authentication JWT, this allows the integrators to POST to the /Collect call securely.
+Interpreting the Data Exchange Response and Post to /Collect
+
+Now that you have successfully called the Data Exchange API to start the Device Data Collection session and generated an Authentication JWT, you will need to pass the Authentication JWT and Device Data Collection URL up to your frontend.
+
+The front end is the location required to initiate the DeviceDataCollectionUrl because this URL needs access to the consumer's browser in order to invoke Method URL. Integrators will need to
+
+    Initiate a form post in a hidden iframe to the Device Data Collection URL that was passed up from your backend system
+    Set the Authentication JWT as a post parameter.
+
+Below is an example of an iframe:
+
+<iframe height="10" width="10" style="visibility: hidden; position: absolute; top: -1000px; left: -1000px;"></iframe>
+  <form id="collectionForm" name="devicedata" method="POST" action="https://centinelapistag.cardinalcommerce.com/V2/Cruise/Collect">
+    <!-- POST Parameters: is the JWT which is the Authentication JWT with the ReferenceId from the Data Exchange API Response -->
+    <input type="hidden" name="JWT" value="Authentication JWT generated per specification" />
+  </form>
+  <script>window.onload = function () {
+      // Auto submit form on page load
+      document.getElementById('collectionForm').submit();
+    }
+  </script>
+
+After the integrator sends the iframe Cardinal will retrieve the 11 required browser fields and the 3DS Method URL will be invoked. The integrator can then expect either a Return URL or a JSON Object response from their /Collect call.
+
+Example of both are shown below:
+
+{
+  "jti": "f7c64630-a167-11e8-9db5-9f12cae676de",
+  "iat": 1534432854,
+  "iss": "Midas-NoDV-Key",
+  "OrgUnitId": "564cdcbcb9f63f0c48d6387f",
+  "ReferenceId": "c3989c38-6caf-410a-8965-459b1e814648",
+  "ReturnUrl": "http://localhost:8189/cart/enterprise/collect-term",
+  "Payload": {
+    "OrderDetails": {
+      "Amount": 1500,
+      "CurrencyCode": 840,
+      "OrderNumber": "asdf"
+    }
+  },
+  "ObjectifyPayload": true
+}
+
+Start Consumer Authentication with Lookup Request
+
+Cardinal Consumer Authentication is initiated by the integrator, typically when the customer clicks the 'Place Order" or the 'Submit Order' button. This API call is a backend server-to-server message that will be used to start the CCA transaction.
+
+Listed below are some resources for our Cardinal Merchant Plug-in (cmpi) message requirements:
+
+Lookup Request (From Previous Space) and Lookup Response
+
+Sample Code:
+
+<CardinalMPI>
+	<MsgType>cmpi_lookup</MsgType>
+	<Algorithm>SHA-512</Algorithm>
+	<Identifier>{{API_KEY_IDENTIFIER}}</Identifier>
+	<OrgUnit>{{ORG_UNIT_ID}}</OrgUnit>
+	<Signature>{{GENERATED_SIGNATURE_VALUE}}</Signature>
+	<Timestamp>{{TIMESTAMP}}</Timestamp>
+	<OrderNumber>{{ORDER_NUMBER}}</OrderNumber>
+	<CardNumber>{{TEST_CARD_NUMBER}}</CardNumber>
+	<CardExpMonth>06</CardExpMonth>
+	<CardExpYear>2022</CardExpYear>
+	<AcquirerId>428448</AcquirerId>
+	<AcquirerMerchantId>980020230994</AcquirerMerchantId>
+	<ACSWindowSize>05</ACSWindowSize>
+	<BillingAddress1>8100 Tyler Blvd</BillingAddress1>
+	<BillingAddress2 />
+	<BillingCity>Mentor</BillingCity>
+	<BillingCountryCode>US</BillingCountryCode>
+	<BillingFirstName>Chris</BillingFirstName>
+	<BillingLastName>Brown</BillingLastName>
+	<BillingPostalCode>K44060</BillingPostalCode>
+	<BillingState>OH</BillingState>
+	<UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36</UserAgent>
+	<DFReferenceId>{{DF_REFERENCE_ID}}</DFReferenceId>
+	<BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8</BrowserHeader>
+	<BrowserJavaEnabled>True</BrowserJavaEnabled>
+	<BrowserLanguage>en-US</BrowserLanguage>
+	<BrowserColorDepth>24</BrowserColorDepth>
+	<BrowserScreenHeight>864</BrowserScreenHeight>
+	<BrowserScreenWidth>1536</BrowserScreenWidth>
+	<BrowserTimeZone>300</BrowserTimeZone>
+	<CategoryCode>5999</CategoryCode>
+	<CurrencyCode>USD</CurrencyCode>
+	<Amount>12367</Amount>
+	<DeviceChannel>Browser</DeviceChannel>
+	<Email>support@cardinalcommerce.com</Email>
+	<IPAddress>1.12.123.255</IPAddress>
+	<TransactionMode>S</TransactionMode>
+	<TransactionType>C</TransactionType>
+	<Version>1.7</Version>
+</CardinalMPI>
+
+Cardinal requires that all integrators include the 11 required Browser fields listed below when sending their lookup request:
+
+    BrowserJavaEnabled
+    BrowserHeader
+    BrowserLanguage
+    BrowserColorDepth
+    BrowserScreenHeight
+    BrowserScreenWidth
+    BrowserTimeZone
+    UserAgent
+    IPAddress
+    DeviceChannel
+    BrowserJavascriptEnabled
+
+    📘
+
+    Note:
+
+    The DFReferenceId is required in the cmpi_lookup request. Merchants must pass a unique value of DFReferenceId on each Lookup request.
+
+    Device Data Collection must be triggered for each call of cmpi_lookup. This must be done even if the card number has not changed. This is due to EMV 3DS ACS Method URL data which is only valid for 1 transaction attempt. This data must be recollected by the ACS on each call to the ACS for authentication.
+
+Based on the EMVCo requirement, merchants need to display a processing screen (for example, a progress bar or a spinning wheel) during the AReq message processing.
+
+Please ensure that following considerations are taken into account:
+
+    Display the Processing screen that conveys to the Cardholder that processing is occurring (refer to below illustrations).
+    Include the card network program logo for display with or without a white box at the center of the screen unless specifically requested not to include.
+    Not include any other design element or text in the Processing screen.
+    Display the Processing screen for a minimum of two seconds.
+
+
+Handling the Lookup Response
+
+The Lookup Response may return back a StepUpUrl, Payload, ACSUrl and TransactionId. Then these fields are populated, you can determine if you need to present the authentication session to the consumer.
+
+If you need to present the authentication session, then continue with Consumer Authentication. When there is a frictionless response returned, which means no step up, then the StepUpUrl, Payload, and ACSUrl will not be populated.
+
+    🚧
+
+    Warning
+
+    If a Challenge is requested by the issuer, you must continue to consumer authentication within 30 seconds of receiving the Lookup Response. If the StepUp does not occur within this window you may receive an error, or an authentication failure and a new authentication request (cmpi_lookup request) must be created before proceeding.
+
+Continue with Consumer Authentication for a Challenge
+
+After the Lookup Response is returned and the the integrator is indicated to continue with a challenge, you will then need to generate a JSON Web Token (JWT) with the following values: ACSUrl, Payload, TransactionId, your ReturnUrl and (Cardinal generated) ReferenceId. The ReferenceId is the same value that you had previously passed as DFReferenceId on the Lookup Request.
+
+When adding these values to the JWT, you will securely sign them with a secret key provided during the onboarding process.
+
+    📘
+
+    FYI
+
+    In an event where ReturnUrl field is NOT passed on the StepUp Request, Cardinal will return a IRC event to indicate the result of challenge.
+
+Example of a Step-up JWT
+
+{
+  "jti": "4595beb0-a4a9-11e8-8fd8-bdf5ff435fec",
+  "iat": 1534790755,
+  "iss": "Midas-XXXXX-Key",
+  "OrgUnitId": "59c2745f2f3e7357b4aa516a",
+  "ReturnUrl": "http://localhost:8189/cart/enterprise/term",
+  "ReferenceId": "c88b20c0-5047-11e6-8c35-8789b865ff15",
+  "Payload": {
+    "ACSUrl": "https://merchantacsdev.cardinalabs.com/MerchantACSWeb/pareq.jsp?vaa=b&gold=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "Payload": "eNpVUV1PwjAUfe+vIMRX13ZAMsmlCTKJmIAwBzw3XeMaWTe6TfHf25ZNtE/3nNv7cc6FNDdSxm9StEYyWMu65u9yoLLZsE7W2+NiV+7MkzpcZJ7qlgwZbOeJPDP4lKZWpWY0IEEIuIfItjAi57phwMX5cbVh1D3AHUJQSLOKr6xPXDECzQvJ1irj9X36VcZl85oD9iQCUba6Md8sGhPAPUDQmhPLm6aaYtfFj61VIwNRFoBdEgG+7bNtXVRbmReVMUFfNvtlFu+PD4n4OFQHnZ/4MmmzdD4D7H4gyHgjWUhoRKKQDGg0HU+mI6vW8wh44TZhd3QSELtXBxFUbtD8iujEpf4yVk1rjNSil9MjBPJSlVraP3bGb2w13DZfPDtfRWMdG9HQ2+qBr1XWlJCQkS9W3iHsCnB3M9yd10b/zv4DGhKoaw==",
+    "TransactionId": "sRMPWCQoQrEiVxehTnu0"
+  },
+  "ObjectifyPayload": true
+}
+
+Once you have the StepUp JWT, you will need to pass that to the web front-end and create an iFrame to POST the StepUp JWT to the StepUpUrl that was returned on the Lookup Response. The size of the iFrame is in your control and can be tailored to your current checkout experience. The Cruise API Step Up will acknowledge this size and look to fill both the height and width completely. Please keep in mind the guidelines for Step Up frame sizing.
+
+In EMV 3DS, issuers have designed content around the following 4 available challenge window sizes:
+
+    250x400
+    390x400
+    500x600
+    600x400
+
+You can help inform the issuer of your preferred size by using the ACSWindowSize property on the Lookup Request
+
+    🚧
+
+    Warning
+
+    The parent iFrame size must match the challenge window size or the ACSWindowSize sent in the lookup request. Failing to specify the parent iFrame size may result in a poor UX experience.
+
+We recommend using the ThreeDSVersion field on the Lookup Response to help identify the sizing of your iFrame.
+
+Alongside the JWT, integrators may also opt to post another field with a name of MD. The MD field allows integrators to pass any data specific to the checkout session and have it echoed back on the ReturnUrl. For example, integrators may utilize this to reference theirSessionId related to the consumer, allowing them to maintain the consumers experience pre- and post-authentication. Any value provided in this field must be URL encoded.
+
+Post to StepUpURL Sample:
+
+<iFrame height="400" width="390">  
+    <form name="stepup" method="POST" action="https://centinelapistag.cardinalcommerce.com/V2/Cruise/StepUp">
+        <input type="hidden" name="JWT" value="JWT generated by merchant per spec" />
+        <input type="hidden" name="MD" value="ABC123XYZ456" />
+    </form>
+</iFrame>
+
+Handling the Consumer Authentication Response
+
+After the Consumer interacts with the Issuer's ACS, it's important to properly handle getting the session back.
+
+There are 2 ways in which Cardinal can return a response to the merchant:
+Response Returned to the ReturnUrl Set in Merchant StepUp JWT
+
+The payload sent to the ReturnUrl will be URL encoded and Base64 encoded.
+
+The response posted back to the ReturnUrl includes two fields:
+
+TransactionId - will be the Cardinal Transaction Id that is required when making the next API called, cmpi_authenticate request.
+
+Response - is the payload returned back from the Issue ACS, such as the CRes. This value is optional to be sent on the cmpi_authenticate request.
+
+Example:
+
+TransactionId=BwNsDeDPsQV4q8uy1Kq1&MD=ABC123XYZ456&Response=eyJtZXNzYWdlVHlwZSI6IkNSZXMiLCJtZXNzYWdlVmVyc2lvbiI6IjIuMS4wIiwidGhyZWVEU1NlcnZlclRyYW5zSUQiOiJlMzcxZDAzNy1lMTFlLTRkZWQtOWYwZC1mMGM3OTZjMTc2OWMiLCJhY3NUcmFuc0lEIjoiYjc5MjU1YzItYWRjOC00MmVmLWE2ZDUtZWM1MDEyNDUzYTg3IiwiY2hhbGxlbmdlQ29tcGxldGlvbkluZCI6IlkiLCJ0cmFuc1N0YXR1cyI6IlkifQ
+
+Response Returned via JSON Object
+
+Listed below is a code sample of what will be returned to the integrator for Step-up Completion
+
+{
+  "MessageType": "stepUp.completion",
+  "TransactionId": "2VXhY9usqpQhb5YN1250",
+  "MD": "560bd1aa-9521-41f1-a1f6-a4c846b8683d"
+}
+
+Either response will require action on the integrators behalf because Cardinal hands back control of the authenticate iframe content once the integrator receives the POST on their ReturnURL, which marks the completion of Cardinal’s involvement in the transaction giving the integrator control of the content returned to them.
+
+For more information on iframes and session retrieval go to Creating an iframe
+Run the Authenticate Request
+
+After the authentication session is complete, you will need to make the second API call, called the cmpi_authenticate request. This API request will allow the pull back the results of authentication as well as the authentication values required to be passed in authorization. At a minimum, send the TransactionIdto the ReturnUrl in order to make the cmpi_authenticate request. Or pass the TransactionId and the Response in the PAResPayload field on the authenticate request.
+
+Code Sample:
+
+<CardinalMPI>
+	<MsgType>cmpi_authenticate</MsgType>
+	<Algorithm>SHA-512</Algorithm>
+	<Identifier>{{API_KEY_IDENTIFIER}}</Identifier>
+	<OrgUnit>{{ORG_UNIT_ID}}</OrgUnit>
+	<Signature>{{GENERATED_SIGNATURE_VALUE}}</Signature>
+	<Timestamp>{{TIMESTAMP}}</Timestamp>
+	<TransactionId>{{TRANSACTION_ID}}</TransactionId>
+	<TransactionType>C</TransactionType>
+	<Version>1.7</Version>
+</CardinalMPI>
+
+Please follow the Authenticate Request/Response sections for completing your backend integration.
+
+Authenticate Request and Authenticate Response
+Process the Authorization to the Processor
+
+After processing the cmpi_authenticate request, on the response take the results of authentication and send them on the authorization request for processing. Please consult and refer to your gateway or processor implementation guides for how to pass 3DS data elements in authorization.

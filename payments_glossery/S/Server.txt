@@ -1,0 +1,3 @@
+Server
+
+A computer system that provides services to other computer systems over a network. Can be in the form of hardware or software. Performs coordination functions, administration, and access functions.

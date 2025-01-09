@@ -1,0 +1,21 @@
+Step 2: Configure Burp Suite to Focus on These Endpoints
+A. Setting the Target Scope
+
+    Open Burp Suite and go to the "Target" tab.
+    In the left pane under "Scope", click "Add to Scope".
+    Define your scope:
+        Include traffic for:
+
+        *cardinalcommerce.com/Encrypted/GetInfo
+        *cardinalcommerce.com/Collect
+        *cardinalcommerce.com/Cruise/StepUp
+        *cardinalcommerce.com/Cruise/Authenticate
+
+        Use regex if needed: .*cardinalcommerce\.com\/(Encrypted\/GetInfo|Collect|Cruise\/StepUp|Cruise\/Authenticate).*.
+
+B. Filter Traffic in Proxy
+
+    Go to the Proxy tab and ensure intercept is enabled.
+    Under HTTP history, use the filter options:
+        Include only traffic matching the above endpoints.
+        Use "Show only in-scope items" to declutter your view.

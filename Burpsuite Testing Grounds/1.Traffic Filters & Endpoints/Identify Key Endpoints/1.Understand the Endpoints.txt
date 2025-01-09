@@ -1,0 +1,19 @@
+Step 1: Understand the Endpoints
+
+Each endpoint plays a specific role in the Cardinal API's 3DS flow:
+
+    /Encrypted/GetInfo:
+        Purpose: Fetch initial encrypted data about the session, like device info and security parameters.
+        Data Involved: Likely contains device fingerprints or user-related encryption keys.
+
+    /Collect:
+        Purpose: Collect device and browser information for risk assessment.
+        Data Involved: Parameters such as user agent, browser capabilities, and geolocation data.
+
+    /Cruise/StepUp:
+        Purpose: Step-up authentication request when additional verification is needed.
+        Data Involved: Transaction ID, JWT, or a reference to the 3DS challenge.
+
+    /Cruise/Authenticate:
+        Purpose: Finalize the authentication process with the issuer or ACS (Access Control Server).
+        Data Involved: Authentication tokens, signed payloads, and responses from ACS.
